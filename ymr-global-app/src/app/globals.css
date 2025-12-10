@@ -1,0 +1,196 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+  /* YMR Brand Colors - Dark Theme by default */
+  --background: rgb(24 45 43); /* #182D2B - Dark teal background */
+  --foreground: rgb(249 250 251); /* Off-white text */
+
+  --card: rgb(26 45 45); /* #1A2D2D - Dark green cards */
+  --card-foreground: rgb(249 250 251);
+
+  --popover: rgb(26 45 45);
+  --popover-foreground: rgb(249 250 251);
+
+  --primary: rgb(42 132 39); /* #2A8427 - YMR Green for buttons */
+  --primary-foreground: rgb(255 255 255);
+
+  --secondary: rgb(55 75 75); /* Slightly lighter green */
+  --secondary-foreground: rgb(249 250 251);
+
+  --muted: rgb(38 54 54); /* Muted dark green */
+  --muted-foreground: rgb(161 172 172);
+
+  --accent: rgb(42 132 39); /* YMR Green */
+  --accent-foreground: rgb(255 255 255);
+
+  --destructive: rgb(239 68 68); /* Red for errors */
+  --border: rgb(38 54 54 / 0.5); /* Subtle borders */
+  --input: rgb(55 75 75); /* Input backgrounds */
+  --ring: rgb(42 132 39); /* Focus ring - YMR Green */
+
+  --chart-1: rgb(42 132 39);
+  --chart-2: rgb(59 130 246);
+  --chart-3: rgb(168 85 247);
+  --chart-4: rgb(251 146 60);
+  --chart-5: rgb(248 113 113);
+
+  --sidebar: rgb(26 45 45);
+  --sidebar-foreground: rgb(249 250 251);
+  --sidebar-primary: rgb(42 132 39);
+  --sidebar-primary-foreground: rgb(255 255 255);
+  --sidebar-accent: rgb(38 54 54);
+  --sidebar-accent-foreground: rgb(249 250 251);
+  --sidebar-border: rgb(38 54 54 / 0.5);
+  --sidebar-ring: rgb(42 132 39);
+}
+
+.dark {
+  /* Dark mode is the default for YMR */
+  --background: rgb(24 45 43); /* #182D2B */
+  --foreground: rgb(249 250 251);
+  --card: rgb(26 45 45);
+  --card-foreground: rgb(249 250 251);
+  --popover: rgb(26 45 45);
+  --popover-foreground: rgb(249 250 251);
+  --primary: rgb(42 132 39);
+  --primary-foreground: rgb(255 255 255);
+  --secondary: rgb(55 75 75);
+  --secondary-foreground: rgb(249 250 251);
+  --muted: rgb(38 54 54);
+  --muted-foreground: rgb(161 172 172);
+  --accent: rgb(42 132 39);
+  --accent-foreground: rgb(255 255 255);
+  --destructive: rgb(239 68 68);
+  --border: rgb(38 54 54 / 0.5);
+  --input: rgb(55 75 75);
+  --ring: rgb(42 132 39);
+  --chart-1: rgb(42 132 39);
+  --chart-2: rgb(59 130 246);
+  --chart-3: rgb(168 85 247);
+  --chart-4: rgb(251 146 60);
+  --chart-5: rgb(248 113 113);
+  --sidebar: rgb(26 45 45);
+  --sidebar-foreground: rgb(249 250 251);
+  --sidebar-primary: rgb(42 132 39);
+  --sidebar-primary-foreground: rgb(255 255 255);
+  --sidebar-accent: rgb(38 54 54);
+  --sidebar-accent-foreground: rgb(249 250 251);
+  --sidebar-border: rgb(38 54 54 / 0.5);
+  --sidebar-ring: rgb(42 132 39);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+/* Bible Modal Animations */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpSheet {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Custom Scrollbar */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(42, 132, 39, 0.3) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: rgba(42, 132, 39, 0.3);
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(42, 132, 39, 0.5);
+}
+
