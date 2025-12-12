@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect, useCallback, Suspense } from 'react'
-import { ChevronDown, Calendar, X } from 'lucide-react'
+import { useState, useEffect, useCallback, Suspense, useRef } from 'react'
+import { useLayoutStore } from '@/lib/store'
+import { ChevronDown, Calendar, X, CheckCircle2 } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 // Common Bible books list with chapter counts
@@ -284,8 +285,8 @@ function VersionModal({
                   : 'hover:bg-muted/30'
               }`}
             >
-              <div>
-                <span className={`font-bold text-lg ${
+              <div className='flex flex-row items-center gap-4'>
+                <span className={`font-bold text-lg  ${
                   currentVersion === trans.id ? 'text-primary' : 'text-foreground'
                 }`}>
                   {trans.abbr}
@@ -300,7 +301,7 @@ function VersionModal({
         </div>
 
         {/* Safe area padding for mobile */}
-        <div className="h-8" />
+        <div className="h-[72px]" />
       </div>
     </>
   )
@@ -339,8 +340,9 @@ function BiblePageContent() {
     setLoading(true)
     setError(null)
     try {
-      // Using bible-api.com (free, no key required)
-      const url = `https://bible-api.com/${book}+${chapter}${translation !== 'web' ? `?translation=${translation}` : ''}`
+      // Use our internal API route to avoid CORS issues
+      const passage = `${book} ${chapter}`
+      const url = `/api/bible?passage=${encodeURIComponent(passage)}&translation=${translation}`
       const res = await fetch(url)
       if (!res.ok) throw new Error('Failed to fetch chapter')
       const data = await res.json()
@@ -365,10 +367,53 @@ function BiblePageContent() {
     setTranslation(newVersion)
   }
 
+  // Layout store for fullscreen reading
+  const { setFullscreen, setHeaderVisible, setBottomNavVisible } = useLayoutStore()
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const lastScrollTop = useRef(0)
+
+  // Reset layout visibility on mount/unmount
+  useEffect(() => {
+    setHeaderVisible(true)
+    setBottomNavVisible(true)
+    return () => {
+      setHeaderVisible(true)
+      setBottomNavVisible(true)
+    }
+  }, [setHeaderVisible, setBottomNavVisible])
+
+  const handleScroll = () => {
+    if (!scrollRef.current) return
+    const scrollTop = scrollRef.current.scrollTop
+    
+    // Ignore small scroll movements (bounce/jitter)
+    if (Math.abs(scrollTop - lastScrollTop.current) < 10) return
+
+    if (scrollTop > lastScrollTop.current && scrollTop > 50) {
+      // Scrolling down - hide UI
+      setFullscreen(true)
+    } else {
+      // Scrolling up - show UI
+      setFullscreen(false)
+    }
+    lastScrollTop.current = scrollTop
+  }
+
+  const handleTap = () => {
+    // Show UI on tap
+    setFullscreen(false)
+  }
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Reading Content - Full screen focus */}
-      <div className="flex-1 overflow-y-auto pb-24">
+      <div 
+        ref={scrollRef}
+        onScroll={handleScroll}
+        onClick={handleTap}
+        onDoubleClick={handleTap}
+        className="flex-1 overflow-y-auto pb-24 scroll-smooth transition-all"
+      >
         <div className="max-w-lg mx-auto px-5 py-6">
           {loading ? (
             <VerseSkeleton />
@@ -468,6 +513,19 @@ function BiblePageContent() {
         currentVersion={translation}
         onSelect={handleVersionSelect}
       />
+      
+      {/* Complete Button for Reading Plan Mode */}
+      {searchParams.get('planMode') === 'true' && (
+        <div className="fixed bottom-24 left-0 right-0 z-50 flex justify-center pointer-events-none">
+          <button 
+            onClick={() => router.back()}
+            className="pointer-events-auto bg-primary text-primary-foreground px-8 py-3 rounded-full font-bold shadow-lg shadow-primary/30 animate-in fade-in slide-in-from-bottom-4 hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+          >
+            <CheckCircle2 className="w-5 h-5" />
+            Complete Reading
+          </button>
+        </div>
+      )}
     </div>
   )
 }

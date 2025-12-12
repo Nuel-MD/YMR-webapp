@@ -45,32 +45,32 @@
 
 :root {
   --radius: 0.625rem;
-  /* YMR Brand Colors - Dark Theme by default */
-  --background: rgb(24 45 43); /* #182D2B - Dark teal background */
-  --foreground: rgb(249 250 251); /* Off-white text */
+  /* YMR Brand Colors - New Deep Dark Teal Theme */
+  --background: rgb(14 31 31); /* #0E1F1F - Deep Dark Teal background */
+  --foreground: rgb(249 250 251); /* #F9FAFB - Off-white text */
 
-  --card: rgb(26 45 45); /* #1A2D2D - Dark green cards */
+  --card: rgb(23 48 46); /* #17302E - Dark Green cards */
   --card-foreground: rgb(249 250 251);
 
-  --popover: rgb(26 45 45);
+  --popover: rgb(23 48 46); /* #17302E - Dark Green */
   --popover-foreground: rgb(249 250 251);
 
-  --primary: rgb(42 132 39); /* #2A8427 - YMR Green for buttons */
+  --primary: rgb(42 132 39); /* #2A8427 - Vibrant Green for buttons */
   --primary-foreground: rgb(255 255 255);
 
-  --secondary: rgb(55 75 75); /* Slightly lighter green */
+  --secondary: rgb(23 48 46); /* #17302E - Dark Green for secondary elements */
   --secondary-foreground: rgb(249 250 251);
 
-  --muted: rgb(38 54 54); /* Muted dark green */
+  --muted: rgb(20 39 38); /* Slightly lighter than background */
   --muted-foreground: rgb(161 172 172);
 
-  --accent: rgb(42 132 39); /* YMR Green */
+  --accent: rgb(42 132 39); /* #2A8427 - Vibrant Green */
   --accent-foreground: rgb(255 255 255);
 
   --destructive: rgb(239 68 68); /* Red for errors */
-  --border: rgb(38 54 54 / 0.5); /* Subtle borders */
-  --input: rgb(55 75 75); /* Input backgrounds */
-  --ring: rgb(42 132 39); /* Focus ring - YMR Green */
+  --border: rgb(23 48 46 / 0.5); /* Subtle borders using Dark Green */
+  --input: rgb(23 48 46); /* #17302E - Dark Green for inputs */
+  --ring: rgb(42 132 39); /* Focus ring - Vibrant Green */
 
   --chart-1: rgb(42 132 39);
   --chart-2: rgb(59 130 246);
@@ -78,48 +78,48 @@
   --chart-4: rgb(251 146 60);
   --chart-5: rgb(248 113 113);
 
-  --sidebar: rgb(26 45 45);
+  --sidebar: rgb(23 48 46); /* #17302E - Dark Green */
   --sidebar-foreground: rgb(249 250 251);
   --sidebar-primary: rgb(42 132 39);
   --sidebar-primary-foreground: rgb(255 255 255);
-  --sidebar-accent: rgb(38 54 54);
+  --sidebar-accent: rgb(20 39 38);
   --sidebar-accent-foreground: rgb(249 250 251);
-  --sidebar-border: rgb(38 54 54 / 0.5);
+  --sidebar-border: rgb(23 48 46 / 0.5);
   --sidebar-ring: rgb(42 132 39);
 }
 
 .dark {
   /* Dark mode is the default for YMR */
-  --background: rgb(24 45 43); /* #182D2B */
-  --foreground: rgb(249 250 251);
-  --card: rgb(26 45 45);
+  --background: rgb(14 31 31); /* #0E1F1F - Deep Dark Teal */
+  --foreground: rgb(249 250 251); /* #F9FAFB */
+  --card: rgb(23 48 46); /* #17302E - Dark Green */
   --card-foreground: rgb(249 250 251);
-  --popover: rgb(26 45 45);
+  --popover: rgb(23 48 46); /* #17302E */
   --popover-foreground: rgb(249 250 251);
-  --primary: rgb(42 132 39);
+  --primary: rgb(42 132 39); /* #2A8427 */
   --primary-foreground: rgb(255 255 255);
-  --secondary: rgb(55 75 75);
+  --secondary: rgb(23 48 46); /* #17302E */
   --secondary-foreground: rgb(249 250 251);
-  --muted: rgb(38 54 54);
+  --muted: rgb(20 39 38);
   --muted-foreground: rgb(161 172 172);
-  --accent: rgb(42 132 39);
+  --accent: rgb(42 132 39); /* #2A8427 */
   --accent-foreground: rgb(255 255 255);
   --destructive: rgb(239 68 68);
-  --border: rgb(38 54 54 / 0.5);
-  --input: rgb(55 75 75);
-  --ring: rgb(42 132 39);
+  --border: rgb(23 48 46 / 0.5);
+  --input: rgb(23 48 46); /* #17302E */
+  --ring: rgb(42 132 39); /* #2A8427 */
   --chart-1: rgb(42 132 39);
   --chart-2: rgb(59 130 246);
   --chart-3: rgb(168 85 247);
   --chart-4: rgb(251 146 60);
   --chart-5: rgb(248 113 113);
-  --sidebar: rgb(26 45 45);
+  --sidebar: rgb(23 48 46); /* #17302E */
   --sidebar-foreground: rgb(249 250 251);
   --sidebar-primary: rgb(42 132 39);
   --sidebar-primary-foreground: rgb(255 255 255);
-  --sidebar-accent: rgb(38 54 54);
+  --sidebar-accent: rgb(20 39 38);
   --sidebar-accent-foreground: rgb(249 250 251);
-  --sidebar-border: rgb(38 54 54 / 0.5);
+  --sidebar-border: rgb(23 48 46 / 0.5);
   --sidebar-ring: rgb(42 132 39);
 }
 

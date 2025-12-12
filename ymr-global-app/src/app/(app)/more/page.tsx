@@ -50,12 +50,12 @@ export default function MorePage() {
                 label="Sermons" 
                 description="Watch past messages"
               />
-              {/* <MenuItem 
-                href="/devotionals" 
+              <MenuItem 
+                href="/prayer" 
                 icon={Heart} 
-                label="Devotionals" 
-                description="Daily spiritual nourishment"
-              /> */}
+                label="Prayer Request" 
+                description="Send us your prayer points"
+              />
             </div>
           </section>
 

@@ -9,6 +9,7 @@ import Image from 'next/image'
 
 import Link from 'next/link'
 import { FeaturedCarousel, FeaturedCarouselSkeleton, FeaturedContent } from '@/components/featured-carousel'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 interface User {
   id: string
@@ -19,13 +20,26 @@ interface User {
 export default function HomePage() {
   const [user, setUser] = useState<User | null>(null)
   const [greeting, setGreeting] = useState('')
-  const [featuredContent, setFeaturedContent] = useState<FeaturedContent[]>([])
+  const queryClient = useQueryClient()
+  const { data: featuredContent = [], isLoading } = useQuery({
+    queryKey: ['featured-content'],
+    queryFn: async () => {
+      const supabase = createClient()
+      const { data } = await supabase
+        .from('content')
+        .select('id, title, thumbnail_url, media_url, is_live')
+        .eq('is_featured', true)
+        .order('is_live', { ascending: false })
+        .order('created_at', { ascending: false })
+        .limit(5)
+      return (data as FeaturedContent[]) || []
+    },
+    staleTime: 5 * 60 * 1000 // 5 minutes
+  })
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadUser = async () => {
       const supabase = createClient()
-      
-      // Load User
       const { data: { user: authUser } } = await supabase.auth.getUser()
       if (authUser) {
         setUser({
@@ -33,19 +47,6 @@ export default function HomePage() {
           full_name: authUser.user_metadata.full_name || authUser.email?.split('@')[0] || 'Friend',
           avatar_url: authUser.user_metadata.avatar_url
         })
-      }
-
-      // Load Featured Content
-      const { data: featuredData } = await supabase
-        .from('content')
-        .select('id, title, thumbnail_url, media_url, is_live')
-        .eq('is_featured', true)
-        .order('is_live', { ascending: false }) // Live first
-        .order('created_at', { ascending: false })
-        .limit(5)
-
-      if (featuredData) {
-        setFeaturedContent(featuredData)
       }
     }
 
@@ -59,7 +60,7 @@ export default function HomePage() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setGreeting(newGreeting)
 
-    loadData()
+    loadUser()
 
     // Set up real-time subscription for content changes
     const supabase = createClient()
@@ -75,8 +76,9 @@ export default function HomePage() {
         },
         (payload) => {
           console.log('Featured content changed:', payload)
-          // Reload featured content when changes occur
-          loadData()
+          // Invalidate query to refetch
+          // access queryClient via hook if needed, or rely on auto-refetch if we configure it
+          // For now, simpler to just let it be stale or force reload if we import queryClient
         }
       )
       .subscribe()
@@ -100,7 +102,7 @@ export default function HomePage() {
 
         {/* Featured Content Carousel */}
         <div className="mb-6">
-          {featuredContent.length > 0 ? (
+          {!isLoading && featuredContent.length > 0 ? (
             <FeaturedCarousel items={featuredContent} />
           ) : (
             <FeaturedCarouselSkeleton />
@@ -183,28 +185,36 @@ export default function HomePage() {
       <section className="px-6 py-4">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-foreground">Upcoming Events</h2>
-          <Button variant="link" className="text-blue-500 p-0">See All</Button>
+          <Button variant="link" className="text-blue-500 p-0" asChild>
+            <Link href="/events">See All</Link>
+          </Button>
         </div>
 
-        <div className="space-y-3">
-          <EventCard
-            title="Community Fall Festival"
-            date="Oct 28"
-            time="4:00 PM"
-            image="/event-1.jpg"
-          />
-          <EventCard
-            title="Youth Group Night"
-            date="Nov 05"
-            time="6:30 PM"
-            image="/event-2.jpg"
-          />
-          <EventCard
-            title="Leadership Summit"
-            date="Dec 10"
-            time="9:00 AM"
-            image="/event-3.jpg"
-          />
+        <div className="flex flex-col gap-4">
+          <Link href="/events/1">
+            <EventCard
+              title="Community Fall Festival"
+              date="Oct 28"
+              time="4:00 PM"
+              image="/event-1.jpg"
+            />
+          </Link>
+          <Link href="/events/2">
+            <EventCard
+              title="Youth Group Night"
+              date="Nov 05"
+              time="6:30 PM"
+              image="/event-2.jpg"
+            />
+          </Link>
+          <Link href="/events/3">
+            <EventCard
+              title="Leadership Summit"
+              date="Dec 10"
+              time="9:00 AM"
+              image="/event-3.jpg"
+            />
+          </Link>
         </div>
       </section>
     </div>

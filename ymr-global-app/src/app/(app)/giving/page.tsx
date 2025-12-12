@@ -7,10 +7,46 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { CreditCard, Wallet, Heart, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
+import { usePaystackPayment } from 'react-paystack'
 
 export default function GivingPage() {
   const [amount, setAmount] = useState('')
   const [type, setType] = useState('offering')
+  const [email, setEmail] = useState('')
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+  
+  // Replace with your actual public key from Paystack
+  const publicKey = 'pk_test_YourPublicKeyHere' 
+
+  // Simple validation
+  const isValid = amount && parseFloat(amount) > 0 && email && name
+
+  const componentProps = {
+    email,
+    amount: (parseFloat(amount || '0') * 100), // Paystack takes amount in kobo
+    metadata: {
+      name,
+      phone,
+      custom_fields: [
+        {
+          display_name: "Giving Type",
+          variable_name: "giving_type",
+          value: type
+        }
+      ]
+    },
+    publicKey,
+    text: "Give Now",
+    onSuccess: () => {
+      alert("Thanks for your support! We have received your payment.")
+      setAmount('')
+      setEmail('')
+      setName('')
+      setPhone('')
+    },
+    onClose: () => alert("Transaction canceled"),
+  }
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -45,6 +81,35 @@ export default function GivingPage() {
             </div>
 
             <div className="space-y-2">
+              <Label>Full Name</Label>
+              <Input 
+                placeholder="John Doe" 
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Email Address</Label>
+              <Input 
+                type="email"
+                placeholder="john@example.com" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Phone Number (Optional)</Label>
+              <Input 
+                type="tel"
+                placeholder="+234..." 
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label>Amount (NGN)</Label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold">₦</span>
@@ -73,10 +138,7 @@ export default function GivingPage() {
             </div>
           </div>
 
-          <Button className="w-full h-12 text-lg font-semibold bg-[#0BA4DB] hover:bg-[#0BA4DB]/90 text-white">
-            <CreditCard className="mr-2 h-5 w-5" />
-            Give with Paystack
-          </Button>
+          <PaystackHookExample {...componentProps} disabled={!isValid} />
 
           <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
             <ShieldCheck className="h-3 w-3" />
@@ -103,4 +165,23 @@ export default function GivingPage() {
       </div>
     </div>
   )
+}
+
+function PaystackHookExample({ disabled, ...componentProps }: any) {
+    const initializePayment = usePaystackPayment(componentProps);
+    return (
+      <Button 
+        disabled={disabled}
+        onClick={() => {
+            initializePayment({
+                onSuccess: componentProps.onSuccess,
+                onClose: componentProps.onClose
+            })
+        }}
+        className="w-full h-12 text-lg font-semibold bg-[#0BA4DB] hover:bg-[#0BA4DB]/90 text-white"
+      >
+        <CreditCard className="mr-2 h-5 w-5" />
+        Give Now
+      </Button>
+    );
 }

@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { House, Compass, BookOpenText, TableOfContents } from 'lucide-react'
 import Link from 'next/link'
+import { cn } from '@/lib/utils'
+import { useLayoutStore } from '@/lib/store'
 
 import Header from '@/components/layout/Header'
 
@@ -15,6 +17,7 @@ export default function HomeLayout({
 }) {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
+  const { isHeaderVisible, isBottomNavVisible } = useLayoutStore()
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -41,14 +44,20 @@ export default function HomeLayout({
 
   return (
     <div className="flex h-screen flex-col bg-background">
-      <Header />
+      <div className={cn("transition-all duration-300 ease-in-out", isHeaderVisible ? "translate-y-0" : "-translate-y-full absolute w-full z-40")}>
+        <Header />
+      </div>
+      
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto pb-20">
+      <main className={cn("flex-1 overflow-y-auto transition-all duration-300", isBottomNavVisible ? "pb-20" : "pb-0")}>
         {children}
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border">
+      <nav className={cn(
+        "fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border transition-transform duration-300 ease-in-out",
+        isBottomNavVisible ? "translate-y-0" : "translate-y-full"
+      )}>
         <div className="flex items-center justify-around px-6 py-3">
           <NavItem href="/home" icon={House} label="Home" />
           <NavItem href="/bible" icon={BookOpenText} label="Bible" />
@@ -69,13 +78,33 @@ function NavItem({
   icon: React.ElementType
   label: string
 }) {
+  const pathname = usePathname()
+  
+  const isActive = pathname.startsWith(href)
+  
   return (
     <Link 
       href={href}
-      className="flex flex-col items-center justify-center space-y-1 min-w-[60px] py-2 px-3 rounded-lg transition-colors group"
+      className={cn(
+        "flex flex-col items-center justify-center space-y-1 min-w-[60px] py-2 px-3 rounded-lg transition-all active:scale-95 touch-manipulation",
+        isActive ? "text-primary" : "text-muted-foreground hover:text-primary"
+      )}
     >
-      <Icon className="h-6 w-6 text-white group-hover:text-green-500 transition-colors" strokeWidth={2} />
-      <span className="text-xs font-medium text-white group-hover:text-green-500 transition-colors">{label}</span>
+      <Icon 
+        className={cn(
+          "h-6 w-6 transition-colors",
+          isActive ? " stroke-current" : "text-muted-foreground group-hover:text-primary"
+        )} 
+        strokeWidth={isActive ? 2.5 : 2} 
+      />
+      <span 
+        className={cn(
+          "text-xs font-medium transition-colors",
+          isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"
+        )}
+      >
+        {label}
+      </span>
     </Link>
   )
 }

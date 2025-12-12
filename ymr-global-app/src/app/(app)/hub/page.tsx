@@ -26,18 +26,18 @@ export default function HubPage() {
         
         <Tabs defaultValue="feed" className="w-full">
           <TabsList className="w-full justify-start h-auto p-0 bg-transparent border-b border-border rounded-none px-4">
-            <TabsTrigger 
-              value="feed" 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent pb-3 pt-2 px-4 font-medium"
-            >
-              Feed
-            </TabsTrigger>
-            <TabsTrigger 
-              value="groups" 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent pb-3 pt-2 px-4 font-medium"
-            >
-              Groups
-            </TabsTrigger>
+          <TabsTrigger 
+            value="feed" 
+            className="rounded-none border-0 border-b-2 border-transparent bg-transparent px-4 pb-3 pt-2 font-medium data-[state=active]:border-b-[#277C28]! data-[state=active]:bg-transparent dark:data-[state=active]:bg-transparent data-[state=active]:text-white data-[state=active]:shadow-none data-[state=active]:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+          >
+            Feed
+          </TabsTrigger>
+          <TabsTrigger 
+            value="groups" 
+            className="rounded-none border-0 border-b-2 border-transparent bg-transparent px-4 pb-3 pt-2 font-medium data-[state=active]:border-b-[#277C28]! data-[state=active]:bg-transparent dark:data-[state=active]:bg-transparent data-[state=active]:text-white data-[state=active]:shadow-none data-[state=active]:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+          >
+            Groups
+          </TabsTrigger>
           </TabsList>
 
           <div className="p-4">
